@@ -1,14 +1,7 @@
-const getMainComponent = (body) => {
-  for (const element of body) {
-    if (element.type === 'ReturnStatement' && element.argument?.type === 'JSXElement') {
-      return body
-    }
-  }
-}
+const { getCurrentOrder, getMainComponent } = require("./utils");
 
 /* 
-  Suggested order:
-
+  Xsolis order:
   1. Selectors
   2. Dispatch
   3. Actions
@@ -17,6 +10,7 @@ const getMainComponent = (body) => {
   6. Variables
   7. Functions
 */
+
 
 module.exports = {
   meta: {
@@ -31,26 +25,22 @@ module.exports = {
   create(context) {
     return {
       BlockStatement(node) {
-        const body = node.body;
-        if (Array.isArray(body)) {
-          const bodyElements = getMainComponent(body);
-          if (!bodyElements) {
-            return
-          }
-          const firstElement = bodyElements[0];
-          if (firstElement.type === 'VariableDeclaration' && firstElement.declarations[0].init.callee.name === 'useState') {
-            context.report({
-              node: firstElement,
-              message: 'State should be declared after all the hooks',
-              loc: {
-                start: firstElement.loc.start,
-                end: firstElement.loc.end
-              }
-            });
-          }
-
+        const body = Array.from(node.body);
+        const bodyItems = getMainComponent(body);
+        if (!bodyItems) {
+          return
         }
-
+        const currentOrder = getCurrentOrder(bodyItems)
+        if (currentOrder[0] === 'useState') {
+          context.report({
+            node,
+            message: 'Use selectors before states',
+            loc: {
+              start: node.loc.start,
+              end: node.loc.end
+            }
+          })
+        }
       }
     };
   }
