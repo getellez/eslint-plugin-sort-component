@@ -3,6 +3,8 @@ const FUNCTION_NAME = 'function'
 const DECLARATION_NAME = 'declaration'
 const OTHER_NAME = 'other'
 const DISPATCH_NAME = 'dispatch'
+const CUSTOM_HOOK_NAME = 'customHook'
+const STANDARD_HOOK_NAME = 'standardHook'
 
 const standardHooks = [
   "useState",
@@ -56,6 +58,8 @@ module.exports = {
   DECLARATION_NAME,
   OTHER_NAME,
   DISPATCH_NAME,
+  CUSTOM_HOOK_NAME,
+  STANDARD_HOOK_NAME,
   standardHooks,
   sortingStyle
 }

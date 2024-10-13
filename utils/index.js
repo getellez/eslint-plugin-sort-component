@@ -1,4 +1,4 @@
-const { DECLARATION_NAME, SELECTOR_NAME, DISPATCH_NAME, FUNCTION_NAME, OTHER_NAME } = require("./constants")
+const { DECLARATION_NAME, SELECTOR_NAME, DISPATCH_NAME, FUNCTION_NAME, OTHER_NAME, standardHooks } = require("./constants")
 
 const getMainComponent = (body) => {
   for (const element of body) {
@@ -8,19 +8,34 @@ const getMainComponent = (body) => {
   }
 }
 
+const isSelectorHook = (name) => {
+  return name.toLowerCase().startsWith('use') && name.toLowerCase().includes(SELECTOR_NAME)
+}
+
+const isDispatchHook = (name) => {
+  return name.toLowerCase().startsWith('use') && name.toLowerCase().includes(DISPATCH_NAME)
+}
+
+const isCustomHook = (name) => {
+  return name.toLowerCase().startsWith('use') && !standardHooks.includes(name)
+}
+
 const getVariableDeclarationName = (bodyItem) => {
   const expressionNode = bodyItem.declarations[0].init
+  const calleeName = expressionNode.callee?.name
   if (expressionNode.type === 'CallExpression') {
     if (expressionNode.callee.type === 'MemberExpression') {
       // A regular variable or constant declaration.
       // i.e const name = 'Jhon Doe'
       return DECLARATION_NAME
-    } else if (expressionNode.callee.name.toLowerCase().includes('selector')) {
+    } else if (isCustomHook(calleeName) && isSelectorHook(calleeName)) {
       return SELECTOR_NAME
-    } else if (expressionNode.callee.name.toLowerCase().includes('dispatch')) {
+    } else if (isCustomHook(calleeName) && isDispatchHook(calleeName)) {
       return DISPATCH_NAME
+    } else if (isCustomHook(calleeName) && !isSelectorHook(calleeName)) {
+      return CUSTOM_HOOK_NAME
     }
-    return expressionNode.callee.name
+    return calleeName
   } else if (expressionNode.type === 'ArrowFunctionExpression') {
     return FUNCTION_NAME
   } else if (expressionNode.type === 'FunctionExpression') {
@@ -47,7 +62,7 @@ const getCurrentOrder = (bodyItems) => {
       const name = getExpressionStatementName(item)
       currentOrder.push({ name, node: item })
     } else if (item.type === 'FunctionDeclaration') {
-      currentOrder.push({ name: 'function', node: item })
+      currentOrder.push({ name: FUNCTION_NAME, node: item })
     }
   }
   return currentOrder
