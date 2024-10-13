@@ -1,16 +1,5 @@
-const { getCurrentOrder, getMainComponent } = require("./utils");
-
-/* 
-  Xsolis order:
-  1. Selectors
-  2. Dispatch
-  3. Actions
-  4. States
-  5. Hooks
-  6. Variables
-  7. Functions
-*/
-
+const { getCurrentOrder, getMainComponent, compareOrderAndReportSuggestions } = require("./utils");
+const { sortingStyle } = require("./utils/constants");
 
 module.exports = {
   meta: {
@@ -30,17 +19,9 @@ module.exports = {
         if (!bodyItems) {
           return
         }
+        const expectedOrder = sortingStyle.default
         const currentOrder = getCurrentOrder(bodyItems)
-        if (currentOrder[0] === 'useState') {
-          context.report({
-            node,
-            message: 'Use selectors before states',
-            loc: {
-              start: node.loc.start,
-              end: node.loc.end
-            }
-          })
-        }
+        compareOrderAndReportSuggestions(context, currentOrder, expectedOrder)
       }
     };
   }
