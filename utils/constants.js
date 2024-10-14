@@ -1,12 +1,13 @@
-const SELECTOR_NAME = 'selector'
-const FUNCTION_NAME = 'function'
-const DECLARATION_NAME = 'declaration'
-const OTHER_NAME = 'other'
-const DISPATCH_NAME = 'dispatch'
-const CUSTOM_HOOK_NAME = 'customHook'
-const STANDARD_HOOK_NAME = 'standardHook'
+const SELECTOR_TYPE = 'Selector'
+const DISPATCH_TYPE = 'Dispatch'
+const BUILTIN_HOOK_TYPE = 'Built-in hooks'
+const CUSTOM_HOOK_TYPE = 'Custom hooks'
+const DECLARATION_TYPE = 'Declarations'
+const FUNCTION_TYPE = 'Functions'
+const OTHER_TYPE = 'other'
 
-const standardHooks = [
+
+const builtInHooks = [
   "useState",
   "useEffect",
   "useContext",
@@ -16,50 +17,34 @@ const standardHooks = [
   "useRef",
   "useImperativeHandle",
   "useLayoutEffect",
-  "useDebugValue"
+  "useInsertionEffect",
+  "useTransition",
+  "useDebugValue",
+  "useDeferredValue",
+  "useId",
+  "useSyncExternalStore",
+  "useActionState",
 ];
-/* 
-  Xsolis order:
-  1. Selectors
-  2. Dispatch
-  3. Actions
-  4. States
-  5. Hooks
-  6. Custom hooks
-  6. Variables
-  7. Functions
-*/
 
 const sortingStyle = {
   default: [
-    'selector',
-    'dispatch',
-    'useState',
-    'standardHook',
-    'otherHook',
-    'declaration',
-    'function',
-    'useEffect'
-  ],
-  xsolis: [
-    'selector',
-    'useState',
-    'useEffect',
-    'standardHook',
-    'otherHook',
-    'declaration',
-    'function'
+    SELECTOR_TYPE,
+    DISPATCH_TYPE,
+    BUILTIN_HOOK_TYPE,
+    CUSTOM_HOOK_TYPE,
+    DECLARATION_TYPE,
+    FUNCTION_TYPE
   ]
 }
 
 module.exports = {
-  SELECTOR_NAME,
-  FUNCTION_NAME,
-  DECLARATION_NAME,
-  OTHER_NAME,
-  DISPATCH_NAME,
-  CUSTOM_HOOK_NAME,
-  STANDARD_HOOK_NAME,
-  standardHooks,
+  SELECTOR_TYPE,
+  DISPATCH_TYPE,
+  BUILTIN_HOOK_TYPE,
+  CUSTOM_HOOK_TYPE,
+  DECLARATION_TYPE,
+  FUNCTION_TYPE,
+  OTHER_TYPE,
+  builtInHooks,
   sortingStyle
 }
