@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-sort-component",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Eslint plugin to sort expressions inside of the React component",
   "main": "eslint-plugin-sort-component.js",
   "peerDependencies": {
